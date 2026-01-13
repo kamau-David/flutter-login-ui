@@ -23,26 +23,28 @@ class LoginScreen extends StatelessWidget {
             child: Padding(
               padding: EdgeInsetsGeometry.symmetric(vertical: 5),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Welcome Back!',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
+                  Center(
+                    child: Text(
+                      'Welcome Back!',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
 
-                  Text(
-                    'Sign in to your account',
-                    style: TextStyle(color: Colors.white70),
+                  Center(
+                    child: Text(
+                      'Sign in to your account',
+                      style: TextStyle(color: Colors.white70),
+                    ),
                   ),
 
                   SizedBox(height: 40),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('Email', style: TextStyle(color: Colors.white)),
-                  ),
+                  Text('Email', style: TextStyle(color: Colors.white)),
 
                   SizedBox(height: 10),
 
@@ -133,7 +135,7 @@ class LoginScreen extends StatelessWidget {
                       onPressed: () {},
                       icon: Image.asset('assets/images/Google-G-Logo.png'),
                       label: Text(
-                        'Sign up with google',
+                        'Sign in with google',
                         style: TextStyle(color: Colors.blueGrey),
                       ),
                       style: OutlinedButton.styleFrom(
