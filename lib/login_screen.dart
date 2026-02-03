@@ -1,17 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:login_screen/textfield_design.dart';
+import 'home_screen.dart';
+import 'signup_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  // Controllers to capture what the user types
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  // It's a best practice to dispose controllers when the screen is closed
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _handleSignIn() {
+    // For now, we'll just check if they entered something
+    if (_emailController.text.isNotEmpty &&
+        _passwordController.text.isNotEmpty) {
+      // SUCCESS: Navigate to Home and remove the Login screen from the stack
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    } else {
+      // ERROR: Show a quick message if empty
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter your email and password')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.bottomLeft,
             end: Alignment.bottomRight,
@@ -20,158 +55,116 @@ class LoginScreen extends StatelessWidget {
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsetsGeometry.symmetric(vertical: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Text(
-                      'Welcome Back!',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                      ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Center(
+                  child: Text(
+                    'Welcome Back!',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                ),
+                const SizedBox(height: 40),
+                const Text('Email', style: TextStyle(color: Colors.white)),
+                const SizedBox(height: 10),
 
-                  Center(
-                    child: Text(
-                      'Sign in to your account',
-                      style: TextStyle(color: Colors.white70),
-                    ),
-                  ),
-
-                  SizedBox(height: 40),
-                  Text('Email', style: TextStyle(color: Colors.white)),
-
-                  SizedBox(height: 10),
-
-                  GlassTextField(
+                // Updated to use the Controller
+                TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
                     hintText: 'your email',
-                    icon: Icons.email_outlined,
-                    obscureText: false,
+                    prefixIcon: const Icon(
+                      Icons.email_outlined,
+                      color: Colors.white70,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.2),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide.none,
+                    ),
                   ),
+                ),
 
-                  SizedBox(height: 40),
+                const SizedBox(height: 20),
+                const Text('Password', style: TextStyle(color: Colors.white)),
+                const SizedBox(height: 10),
 
-                  GlassTextField(
+                // Updated to use the Controller
+                TextField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
                     hintText: 'password',
-                    icon: Icons.lock_outlined,
-                    obscureText: true,
-                    suffixIcon: Icons.visibility_off_outlined,
-                  ),
-
-                  SizedBox(height: 10),
-
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Forgot password?',
-                        style: TextStyle(
-                          color: const Color.fromARGB(224, 255, 255, 255),
-                        ),
-                      ),
+                    prefixIcon: const Icon(
+                      Icons.lock_outlined,
+                      color: Colors.white70,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.2),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide.none,
                     ),
                   ),
+                ),
 
-                  SizedBox(height: 40),
-                  SizedBox(
-                    height: 56,
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 146, 99, 234),
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      child: Text(
-                        'Sign In',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
+                const SizedBox(height: 40),
+                SizedBox(
+                  height: 56,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _handleSignIn, // Trigger our navigation logic
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 146, 99, 234),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
                       ),
                     ),
+                    child: const Text(
+                      'Sign In',
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    ),
                   ),
+                ),
 
-                  SizedBox(height: 20),
-
-                  Row(
-                    children: [
-                      Expanded(child: Divider(color: Colors.white30)),
-                      Padding(
-                        padding: EdgeInsetsGeometry.symmetric(horizontal: 12),
-                      ),
-                      Text(
-                        'OR',
-                        style: TextStyle(
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      // This pushes the SignupScreen onto the stack
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SignupScreen(),
+                        ),
+                      );
+                    },
+                    child: Text.rich(
+                      TextSpan(
+                        text: 'Don\'t have an account?',
+                        style: const TextStyle(
+                          color: Colors.black38,
                           fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
                         ),
-                      ),
-
-                      Padding(
-                        padding: EdgeInsetsGeometry.symmetric(horizontal: 12),
-                      ),
-
-                      Expanded(child: Divider(color: Colors.white30)),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-
-                  SizedBox(
-                    height: 50,
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      onPressed: () {},
-                      icon: Image.asset('assets/images/Google-G-Logo.png'),
-                      label: Text(
-                        'Sign in with google',
-                        style: TextStyle(color: Colors.blueGrey),
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        side: BorderSide(color: Colors.white),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 20),
-                  Center(
-                    child: TextButton(
-                      onPressed: () {},
-                      child: Text.rich(
-                        TextSpan(
-                          text: 'Don\'t have an account?',
-                          style: TextStyle(color: Colors.black38, fontSize: 18),
-                          children: [
-                            TextSpan(
-                              text: ' Sign up',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
+                        children: [
+                          TextSpan(
+                            text: ' Sign up',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
